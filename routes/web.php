@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageConversionController;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('landing');
@@ -10,7 +11,20 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return redirect()->route('conversions.index');
+        $user = auth()->user();
+        $conversions = $user->imageConversions()
+            ->latest()
+            ->take(5)
+            ->get();
+        
+        $totalSizeReduction = $user->imageConversions()
+            ->sum(DB::raw('original_size - converted_size'));
+            
+        $todayConversions = $user->imageConversions()
+            ->whereDate('created_at', today())
+            ->count();
+            
+        return view('dashboard', compact('conversions', 'totalSizeReduction', 'todayConversions'));
     })->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

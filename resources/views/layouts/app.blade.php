@@ -11,8 +11,38 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Session Messages -->
+        @if(session('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: "{{ session('success') }}",
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            </script>
+        @endif
+
+        @if(session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: "{{ session('error') }}",
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            </script>
+        @endif
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">

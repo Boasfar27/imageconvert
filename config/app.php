@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Facade;
 
 return [
 
@@ -125,7 +126,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'providers' => [
+    'providers' => ServiceProvider::defaultProviders()->merge([
         /*
          * Laravel Framework Service Providers...
          */
@@ -155,6 +156,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -163,6 +165,10 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-    ],
+    ])->toArray(),
+
+    'aliases' => Facade::defaultAliases()->merge([
+        'Image' => Intervention\Image\Facades\Image::class,
+    ])->toArray(),
 
 ];

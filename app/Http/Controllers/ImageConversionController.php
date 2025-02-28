@@ -82,15 +82,19 @@ class ImageConversionController extends Controller
                 'original_size' => $originalSize,
                 'converted_size' => $convertedSize
             ]);
+
+            $savedSize = $originalSize - $convertedSize;
+            $savedPercentage = round(($savedSize / $originalSize) * 100, 1);
             
             return redirect()->route('conversions.index')
-                ->with('success', 'Gambar berhasil dikonversi ke WebP! Ukuran file berkurang ' . 
-                    number_format(($originalSize - $convertedSize) / 1024, 1) . ' KB (' .
-                    number_format((($originalSize - $convertedSize) / $originalSize) * 100, 1) . '%)');
+                ->with('success', "Berhasil mengkonversi gambar '{$originalName}' dari {$originalFormat} ke WebP! " . 
+                    "Ukuran file berkurang dari " . number_format($originalSize / 1024, 1) . " KB menjadi " . 
+                    number_format($convertedSize / 1024, 1) . " KB " .
+                    "(menghemat {$savedPercentage}%)");
                     
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat mengkonversi gambar: ' . $e->getMessage())
+                ->with('error', "Gagal mengkonversi gambar '{$originalName}': " . $e->getMessage())
                 ->withInput();
         }
     }

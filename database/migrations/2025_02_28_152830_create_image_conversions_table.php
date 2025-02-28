@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('converted_format');
             $table->integer('original_size');
             $table->integer('converted_size');
+            $table->integer('size_reduction')->virtualAs('original_size - converted_size');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
