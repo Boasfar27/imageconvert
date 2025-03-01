@@ -17,10 +17,16 @@ class DateHelper
             'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
         ];
+
+        $days = [
+            'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'
+        ];
         
-        return $date->format('d') . ' ' . 
+        return $days[$date->format('w')] . ', ' . 
+               $date->format('d') . ' ' . 
                $months[$date->format('n') - 1] . ' ' . 
-               $date->format('Y H:i');
+               $date->format('Y') . ' ' .
+               $date->format('H:i') . ' WIB';
     }
 
     public static function formatSize($bytes)
