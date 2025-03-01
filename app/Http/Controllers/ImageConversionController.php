@@ -9,28 +9,33 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use App\Helpers\DateHelper;
 
 class ImageConversionController extends Controller
 {
     public function __construct()
     {
+        // Set timezone untuk Indonesia
+        date_default_timezone_set('Asia/Jakarta');
+        
         // Set PHP limits berdasarkan konfigurasi
-        ini_set('upload_max_filesize', config('upload.max_file_size'));
-        ini_set('post_max_size', config('upload.post_max_size'));
-        ini_set('max_execution_time', config('upload.max_execution_time'));
-        ini_set('memory_limit', config('upload.memory_limit'));
+        ini_set('upload_max_filesize', '100M');
+        ini_set('post_max_size', '100M');
+        ini_set('memory_limit', '256M');
+        ini_set('max_execution_time', '300');
+        ini_set('max_input_time', '300');
     }
 
     public function index()
     {
         $conversions = auth()->user()->imageConversions()
             ->latest()
-            ->paginate(10);
+            ->paginate(5);
             
         // Hitung total penghematan ukuran
-        $totalSaved = $conversions->sum(function ($conversion) {
-            return $conversion->original_size - $conversion->converted_size;
-        });
+        $totalSaved = auth()->user()->imageConversions()
+            ->sum(DB::raw('original_size - converted_size'));
         
         return view('conversions.index', compact('conversions', 'totalSaved'));
     }
@@ -44,43 +49,59 @@ class ImageConversionController extends Controller
     {
         try {
             // Log informasi request dan konfigurasi
-            Log::info('Upload attempt', [
+            Log::info('Upload attempt - Detailed', [
                 'file_size' => $request->file('image') ? $request->file('image')->getSize() : 'No file',
                 'max_upload_size' => ini_get('upload_max_filesize'),
                 'post_max_size' => ini_get('post_max_size'),
                 'memory_limit' => ini_get('memory_limit'),
-                'content_length' => $request->header('Content-Length')
+                'content_length' => $request->header('Content-Length'),
+                'server' => $_SERVER,
+                'request_method' => $request->method(),
+                'request_headers' => $request->headers->all(),
+                'files' => $_FILES,
             ]);
 
             // Cek jika request melebihi post_max_size
             if (empty($_FILES) && empty($_POST) && $request->header('Content-Length') > 0) {
+                Log::error('Upload failed - POST size exceeded', [
+                    'content_length' => $request->header('Content-Length'),
+                    'post_max_size' => ini_get('post_max_size')
+                ]);
                 throw new \Exception('File terlalu besar. Maksimum upload adalah ' . ini_get('post_max_size'));
             }
 
+            // Validasi dasar
             $request->validate([
                 'image' => [
                     'required',
+                    'file', // Tambahkan validasi file
                     'image',
                     'mimes:jpeg,png',
-                    'max:10240', // 10MB dalam kilobytes
-                    function ($attribute, UploadedFile $value, $fail) {
-                        if ($value->getError() !== UPLOAD_ERR_OK) {
-                            $fail($this->getUploadErrorMessage($value->getError()));
-                        }
-                    },
+                    'max:102400', // 100MB dalam kilobytes
                 ],
                 'quality' => 'nullable|integer|min:1|max:100'
             ], [
                 'image.required' => 'Silakan pilih file gambar.',
+                'image.file' => 'Upload gagal. Silakan coba lagi.',
                 'image.image' => 'File harus berupa gambar.',
                 'image.mimes' => 'Format file harus JPG atau PNG.',
-                'image.max' => 'Ukuran file tidak boleh lebih dari 10MB.',
+                'image.max' => 'Ukuran file tidak boleh lebih dari 100MB.',
                 'quality.integer' => 'Kualitas harus berupa angka.',
                 'quality.min' => 'Kualitas minimal 1.',
                 'quality.max' => 'Kualitas maksimal 100.'
             ]);
 
             $image = $request->file('image');
+            
+            // Validasi file
+            if (!$image || !$image->isValid()) {
+                Log::error('Invalid file upload', [
+                    'error' => $image ? $image->getError() : 'No file',
+                    'error_message' => $image ? $this->getUploadErrorMessage($image->getError()) : 'No file uploaded'
+                ]);
+                throw new \Exception('File tidak valid atau rusak. Silakan coba lagi.');
+            }
+
             $originalName = $image->getClientOriginalName();
             $originalFormat = $image->getClientOriginalExtension();
             $originalSize = $image->getSize();
@@ -89,14 +110,16 @@ class ImageConversionController extends Controller
             Log::info('File details', [
                 'name' => $originalName,
                 'format' => $originalFormat,
-                'size' => $originalSize
+                'size' => $originalSize,
+                'mime' => $image->getMimeType(),
+                'error' => $image->getError()
             ]);
 
             // Validasi ukuran file
-            if ($originalSize > 10 * 1024 * 1024) {
+            if ($originalSize > 100 * 1024 * 1024) { // 100MB
                 Log::warning('File too large', ['size' => $originalSize]);
                 return redirect()->back()
-                    ->with('error', 'Ukuran file terlalu besar. Maksimum 10MB.')
+                    ->with('error', 'Ukuran file terlalu besar. Maksimum 100MB.')
                     ->withInput();
             }
             
@@ -109,10 +132,16 @@ class ImageConversionController extends Controller
                 if (!$originalPath) {
                     throw new \Exception('Gagal menyimpan file original');
                 }
+                
+                // Verifikasi file tersimpan
+                if (!Storage::disk('public')->exists($originalPath)) {
+                    throw new \Exception('File tidak tersimpan dengan benar');
+                }
             } catch (\Exception $e) {
                 Log::error('Error saving original file', [
                     'error' => $e->getMessage(),
-                    'file' => $originalName
+                    'file' => $originalName,
+                    'path' => $originalPath ?? 'not set'
                 ]);
                 throw new \Exception('Gagal menyimpan file. Silakan coba lagi.');
             }

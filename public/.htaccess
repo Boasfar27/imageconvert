@@ -24,18 +24,35 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# PHP Settings
 <IfModule mod_php.c>
-    php_value upload_max_filesize 10M
-    php_value post_max_size 10M
+    php_value upload_max_filesize 100M
+    php_value post_max_size 100M
+    php_value memory_limit 256M
     php_value max_execution_time 300
     php_value max_input_time 300
-    php_value memory_limit 256M
 </IfModule>
 
-# For PHP-FPM
+# PHP-FPM Settings
 <IfModule mod_fcgid.c>
-    FcgidMaxRequestLen 10485760
+    FcgidMaxRequestLen 104857600
 </IfModule>
+
+# PHP-FPM via proxy
+<FilesMatch "\.php$">
+    SetHandler "proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"
+</FilesMatch>
+
+# Additional PHP Settings
+php_value max_input_vars 1000
+php_value suhosin.post.max_vars 1000
+php_value suhosin.request.max_vars 1000
+php_value suhosin.get.max_vars 1000
+
+# Increase buffer size
+php_value output_buffering 4096
+php_value realpath_cache_size 4096k
+php_value realpath_cache_ttl 7200
 
 # If using nginx, add these to your nginx.conf:
-# client_max_body_size 10M;
+# client_max_body_size 100M;

@@ -12,10 +12,14 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         $user = auth()->user();
+        
+        // Get total conversions count
+        $totalConversions = $user->imageConversions()->count();
+        
+        // Get paginated conversions
         $conversions = $user->imageConversions()
             ->latest()
-            ->take(5)
-            ->get();
+            ->paginate(5);
         
         $totalSizeReduction = $user->imageConversions()
             ->sum(DB::raw('original_size - converted_size'));
@@ -24,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
             ->whereDate('created_at', today())
             ->count();
             
-        return view('dashboard', compact('conversions', 'totalSizeReduction', 'todayConversions'));
+        return view('dashboard', compact('conversions', 'totalSizeReduction', 'todayConversions', 'totalConversions'));
     })->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

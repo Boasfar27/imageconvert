@@ -1,8 +1,18 @@
 <?php
 
 return [
-    'max_file_size' => env('UPLOAD_MAX_FILESIZE', '10M'),
-    'post_max_size' => env('POST_MAX_SIZE', '10M'),
-    'max_execution_time' => env('MAX_EXECUTION_TIME', 300),
-    'memory_limit' => env('MEMORY_LIMIT', '128M'),
+    'max_file_size' => '100M',
+    'post_max_size' => '100M',
+    'memory_limit' => '256M',
+    'max_execution_time' => 300,
+    'allowed_mimes' => ['jpeg', 'jpg', 'png'],
+    'max_dimensions' => [
+        'width' => 5000,
+        'height' => 5000
+    ],
+    'quality' => [
+        'default' => 80,
+        'min' => 1,
+        'max' => 100
+    ]
 ]; 
