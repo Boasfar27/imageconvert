@@ -9,13 +9,13 @@
                 <svg class="w-6 h-6 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                {{ __('Image Conversions') }}
+                {{ __('Konversi Gambar') }}
             </h2>
             <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm">
                 <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                Total Saved: <span class="font-semibold ml-1">{{ number_format($totalSaved / 1024 / 1024, 2) }} MB</span>
+                Total Dihemat: <span class="font-semibold ml-1">{{ DateHelper::formatSize($totalSaved) }}</span>
             </div>
         </div>
     </x-slot>
@@ -29,13 +29,13 @@
                             <svg class="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
-                            Your Conversions
+                            Riwayat Konversi
                         </h3>
                         <a href="{{ route('conversions.create') }}" class="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 border border-transparent rounded-lg font-medium text-sm text-white shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
-                            Convert New Image
+                            Konversi Baru
                             <svg class="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>
@@ -61,7 +61,7 @@
                     @endif
 
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
                                     <th class="group px-6 py-3 text-left">
@@ -144,17 +144,17 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-                                                <span>{{ number_format($conversion->original_size / 1024, 1) }} KB</span>
+                                                <span>{{ DateHelper::formatSize($conversion->original_size) }}</span>
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                                                 </svg>
-                                                <span>{{ number_format($conversion->converted_size / 1024, 1) }} KB</span>
+                                                <span>{{ DateHelper::formatSize($conversion->converted_size) }}</span>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
                                             @php
                                                 $reduction = (($conversion->original_size - $conversion->converted_size) / $conversion->original_size) * 100;
-                                                $savedKB = ($conversion->original_size - $conversion->converted_size) / 1024;
+                                                $savedSize = $conversion->original_size - $conversion->converted_size;
                                             @endphp
                                             <div class="flex items-center space-x-2">
                                                 <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,10 +162,10 @@
                                                 </svg>
                                                 <div>
                                                     <span class="text-green-600 dark:text-green-400 font-medium">
-                                                        {{ number_format($reduction, 1) }}% smaller
+                                                        {{ number_format($reduction, 1) }}% lebih kecil
                                                     </span>
                                                     <span class="text-gray-500 dark:text-gray-400 text-sm block">
-                                                        {{ number_format($savedKB, 1) }} KB saved
+                                                        {{ DateHelper::formatSize($savedSize) }} tersimpan
                                                     </span>
                                                 </div>
                                             </div>

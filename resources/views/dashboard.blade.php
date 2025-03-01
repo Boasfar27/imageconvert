@@ -23,7 +23,7 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Penyimpanan Dihemat</h3>
-                        <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ number_format($totalSizeReduction / 1024 / 1024, 2) }} MB</p>
+                        <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ DateHelper::formatSize($totalSizeReduction) }}</p>
                     </div>
                 </div>
 
@@ -163,17 +163,17 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-                                                <span>{{ number_format($conversion->original_size / 1024, 1) }} KB</span>
+                                                <span>{{ DateHelper::formatSize($conversion->original_size) }}</span>
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                                                 </svg>
-                                                <span>{{ number_format($conversion->converted_size / 1024, 1) }} KB</span>
+                                                <span>{{ DateHelper::formatSize($conversion->converted_size) }}</span>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
                                             @php
                                                 $reduction = (($conversion->original_size - $conversion->converted_size) / $conversion->original_size) * 100;
-                                                $savedKB = ($conversion->original_size - $conversion->converted_size) / 1024;
+                                                $savedSize = $conversion->original_size - $conversion->converted_size;
                                             @endphp
                                             <div class="flex items-center space-x-2">
                                                 <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,10 +181,10 @@
                                                 </svg>
                                                 <div>
                                                     <span class="text-green-600 dark:text-green-400 font-medium">
-                                                        {{ number_format($reduction, 1) }}% smaller
+                                                        {{ number_format($reduction, 1) }}% lebih kecil
                                                     </span>
                                                     <span class="text-gray-500 dark:text-gray-400 text-sm block">
-                                                        {{ number_format($savedKB, 1) }} KB saved
+                                                        {{ DateHelper::formatSize($savedSize) }} tersimpan
                                                     </span>
                                                 </div>
                                             </div>

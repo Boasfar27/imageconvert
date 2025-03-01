@@ -22,4 +22,17 @@ class DateHelper
                $months[$date->format('n') - 1] . ' ' . 
                $date->format('Y H:i');
     }
+
+    public static function formatSize($bytes)
+    {
+        if ($bytes >= 1024 * 1024 * 1024) {
+            return number_format($bytes / 1024 / 1024 / 1024, 2) . ' GB';
+        } elseif ($bytes >= 1024 * 1024) {
+            return number_format($bytes / 1024 / 1024, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 1) . ' KB';
+        } else {
+            return number_format($bytes) . ' B';
+        }
+    }
 } 
