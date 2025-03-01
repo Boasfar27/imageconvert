@@ -224,23 +224,43 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-12 text-center">
-                                            <div class="flex flex-col items-center">
-                                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                                </svg>
-                                                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No conversions yet</h3>
-                                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Start by converting your first image!</p>
-                                                <div class="mt-6">
-                                                    <a href="{{ route('conversions.create') }}" class="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 border border-transparent rounded-lg text-sm font-medium text-white shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105">
-                                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                                        </svg>
-                                                        Start Converting
-                                                        <svg class="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                                        </svg>
-                                                    </a>
+                                        <td colspan="6" class="px-6 py-16 text-center">
+                                            <div class="max-w-md mx-auto">
+                                                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+                                                    <div class="flex flex-col items-center">
+                                                        <div class="relative">
+                                                            <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full blur opacity-25"></div>
+                                                            <div class="relative bg-white dark:bg-gray-800 rounded-full p-4">
+                                                                <svg class="w-16 h-16 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <h3 class="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">Belum Ada Konversi</h3>
+                                                        <p class="mt-3 text-gray-500 dark:text-gray-400 text-center">
+                                                            Mulai mengoptimalkan gambar Anda dengan mengkonversi ke format WebP untuk performa web yang lebih baik.
+                                                        </p>
+                                                        <div class="mt-8">
+                                                            <a href="{{ route('conversions.create') }}" 
+                                                               class="group relative inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-500 hover:to-blue-400 border border-transparent rounded-xl text-base font-medium text-white shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                                                                <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600 to-blue-500 opacity-0 group-hover:opacity-20 rounded-xl transition-opacity"></span>
+                                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                                </svg>
+                                                                Mulai Konversi
+                                                            </a>
+                                                        </div>
+                                                        <div class="mt-6 grid grid-cols-2 gap-4 text-center text-sm">
+                                                            <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Format WebP</p>
+                                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Kompresi modern</p>
+                                                            </div>
+                                                            <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Hemat Ruang</p>
+                                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Hingga 30%</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
@@ -257,23 +277,43 @@
                         </div>
                         </div>
                     @else
-                        <div class="text-center py-12">
-                            <div class="flex flex-col items-center">
-                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Belum ada konversi</h3>
-                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Mulai konversi gambar pertama Anda!</p>
-                                <div class="mt-6">
-                                    <a href="{{ route('conversions.create') }}" class="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 border border-transparent rounded-lg text-sm font-medium text-white shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                        </svg>
-                                        Mulai Konversi
-                                        <svg class="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                        </svg>
-                                    </a>
+                        <div class="text-center py-16">
+                            <div class="max-w-md mx-auto">
+                                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+                                    <div class="flex flex-col items-center">
+                                        <div class="relative">
+                                            <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full blur opacity-25"></div>
+                                            <div class="relative bg-white dark:bg-gray-800 rounded-full p-4">
+                                                <svg class="w-16 h-16 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <h3 class="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">Belum Ada Konversi</h3>
+                                        <p class="mt-3 text-gray-500 dark:text-gray-400 text-center">
+                                            Mulai mengoptimalkan gambar Anda dengan mengkonversi ke format WebP untuk performa web yang lebih baik.
+                                        </p>
+                                        <div class="mt-8">
+                                            <a href="{{ route('conversions.create') }}" 
+                                               class="group relative inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-500 hover:to-blue-400 border border-transparent rounded-xl text-base font-medium text-white shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                                                <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600 to-blue-500 opacity-0 group-hover:opacity-20 rounded-xl transition-opacity"></span>
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                </svg>
+                                                Mulai Konversi
+                                            </a>
+                                        </div>
+                                        <div class="mt-6 grid grid-cols-2 gap-4 text-center text-sm">
+                                            <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Format WebP</p>
+                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Kompresi modern</p>
+                                            </div>
+                                            <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Hemat Ruang</p>
+                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Hingga 30%</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
