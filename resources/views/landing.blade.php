@@ -45,19 +45,18 @@
 <body class="bg-gray-50">
     <div class="min-h-screen flex flex-col">
         <!-- Navigation -->
-        <nav class="bg-white shadow-md fixed w-full z-50">
+        <nav class="bg-gray-900 text-white shadow-md fixed w-full z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-20">
                     <div class="flex items-center">
-                        <div class="flex items-center">
-                            <i class="fas fa-image text-primary-600 text-3xl mr-2"></i>
-                            <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-600 to-blue-600 bg-clip-text text-transparent">
-                                ImageConverter Pro
-                            </h1>
-                        </div>
+                    {{-- Logo Boasfar --}}
+                    <div class="flex items-center">
+                        <span class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Boas</span>
+                        <span class="text-2xl font-bold text-gray-800 dark:text-gray-200">far</span>
+                    </div>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <a href="{{ route('login') }}" class="text-gray-600 hover:text-primary-600 font-medium transition duration-150 ease-in-out">
+                        <a href="{{ route('login') }}" class="text-white hover:text-primary-600 font-medium transition duration-150 ease-in-out">
                             Sign In
                         </a>
                         <a href="{{ route('register') }}" class="gradient-bg text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5">
@@ -71,7 +70,7 @@
         <!-- Hero Section -->
         <main class="flex-grow pt-20">
             <div class="relative overflow-hidden">
-                <div class="gradient-bg text-white py-24">
+                <div class="bg-gray-900 text-white py-24">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="text-center">
                             <h2 class="text-5xl md:text-6xl font-bold leading-tight mb-8">
@@ -99,7 +98,7 @@
             </div>
 
             <!-- Stats Section -->
-            <div class="bg-white py-16">
+            <div class="bg-gray-900 py-16">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                         <div class="p-6">
@@ -119,10 +118,10 @@
             </div>
 
             <!-- Features -->
-            <div id="features" class="py-20 bg-gray-50">
+            <div id="features" class="py-20 bg-gray-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-16">
-                        <h3 class="text-3xl font-bold text-gray-900">Why Choose ImageConverter Pro?</h3>
+                        <h3 class="text-3xl font-bold text-white">Why Choose ImageConverter Pro?</h3>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <!-- Feature 1 -->
@@ -168,7 +167,7 @@
             </div>
 
             <!-- CTA Section -->
-            <div class="gradient-bg py-20">
+            <div class="bg-gray-900 py-20">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h3 class="text-3xl font-bold text-white mb-8">Ready to Optimize Your Images?</h3>
                     <a href="{{ route('register') }}" class="inline-block bg-white text-primary-600 px-8 py-4 rounded-lg font-bold shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5">
@@ -186,10 +185,11 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <div class="flex items-center mb-4">
-                            <i class="fas fa-image text-primary-400 text-2xl mr-2"></i>
-                            <span class="text-xl font-bold text-white">ImageConverter Pro</span>
-                        </div>
+                    {{-- Logo Boasfar --}}
+                    <div class="flex items-center">
+                        <span class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Boas</span>
+                        <span class="text-2xl font-bold text-gray-800 dark:text-gray-200">far</span>
+                    </div>
                         <p class="text-gray-400">
                             The professional choice for image optimization and conversion.
                         </p>
