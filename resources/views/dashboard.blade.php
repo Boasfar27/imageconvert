@@ -150,13 +150,13 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-2">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-white dark:bg-blue-900 dark:text-blue-200">
                                                     {{ $conversion->original_format }}
                                                 </span>
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                                                 </svg>
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-white dark:bg-green-900 dark:text-green-200">
                                                     {{ $conversion->converted_format }}
                                                 </span>
                                             </div>
