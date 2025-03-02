@@ -50,7 +50,7 @@ class ImageConversionController extends Controller
         try {
             // Log informasi request dan konfigurasi
             Log::info('Upload attempt - Detailed', [
-                'file_size' => $request->file('image') ? $request->file('image')->getSize() : 'No file',
+                'files_count' => $request->hasFile('images') ? count($request->file('images')) : 'No files',
                 'max_upload_size' => ini_get('upload_max_filesize'),
                 'post_max_size' => ini_get('post_max_size'),
                 'memory_limit' => ini_get('memory_limit'),
@@ -72,133 +72,137 @@ class ImageConversionController extends Controller
 
             // Validasi dasar
             $request->validate([
-                'image' => [
+                'images' => 'required|array|max:5',
+                'images.*' => [
                     'required',
-                    'file', // Tambahkan validasi file
+                    'file',
                     'image',
                     'mimes:jpeg,png',
                     'max:102400', // 100MB dalam kilobytes
                 ],
-                'quality' => 'nullable|integer|min:1|max:100'
+                'quality' => 'required|integer|min:1|max:100'
             ], [
-                'image.required' => 'Silakan pilih file gambar.',
-                'image.file' => 'Upload gagal. Silakan coba lagi.',
-                'image.image' => 'File harus berupa gambar.',
-                'image.mimes' => 'Format file harus JPG atau PNG.',
-                'image.max' => 'Ukuran file tidak boleh lebih dari 100MB.',
+                'images.required' => 'Silakan pilih file gambar.',
+                'images.array' => 'Format upload tidak valid.',
+                'images.max' => 'Maksimum 5 file yang diperbolehkan.',
+                'images.*.required' => 'File gambar tidak boleh kosong.',
+                'images.*.file' => 'Upload gagal. Silakan coba lagi.',
+                'images.*.image' => 'File harus berupa gambar.',
+                'images.*.mimes' => 'Format file harus JPG atau PNG.',
+                'images.*.max' => 'Ukuran file tidak boleh lebih dari 100MB.',
+                'quality.required' => 'Kualitas harus diisi.',
                 'quality.integer' => 'Kualitas harus berupa angka.',
                 'quality.min' => 'Kualitas minimal 1.',
                 'quality.max' => 'Kualitas maksimal 100.'
             ]);
 
-            $image = $request->file('image');
-            
-            // Validasi file
-            if (!$image || !$image->isValid()) {
-                Log::error('Invalid file upload', [
-                    'error' => $image ? $image->getError() : 'No file',
-                    'error_message' => $image ? $this->getUploadErrorMessage($image->getError()) : 'No file uploaded'
-                ]);
-                throw new \Exception('File tidak valid atau rusak. Silakan coba lagi.');
-            }
-
-            $originalName = $image->getClientOriginalName();
-            $originalFormat = $image->getClientOriginalExtension();
-            $originalSize = $image->getSize();
-
-            // Log informasi file
-            Log::info('File details', [
-                'name' => $originalName,
-                'format' => $originalFormat,
-                'size' => $originalSize,
-                'mime' => $image->getMimeType(),
-                'error' => $image->getError()
-            ]);
-
-            // Validasi ukuran file
-            if ($originalSize > 100 * 1024 * 1024) { // 100MB
-                Log::warning('File too large', ['size' => $originalSize]);
-                return redirect()->back()
-                    ->with('error', 'Ukuran file terlalu besar. Maksimum 100MB.')
-                    ->withInput();
-            }
-            
-            // Generate nama unik untuk file
-            $filename = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '-' . uniqid();
-            
-            // Simpan gambar original dengan penanganan error
-            try {
-                $originalPath = $image->storeAs('original', $filename . '.' . $originalFormat, 'public');
-                if (!$originalPath) {
-                    throw new \Exception('Gagal menyimpan file original');
-                }
-                
-                // Verifikasi file tersimpan
-                if (!Storage::disk('public')->exists($originalPath)) {
-                    throw new \Exception('File tidak tersimpan dengan benar');
-                }
-            } catch (\Exception $e) {
-                Log::error('Error saving original file', [
-                    'error' => $e->getMessage(),
-                    'file' => $originalName,
-                    'path' => $originalPath ?? 'not set'
-                ]);
-                throw new \Exception('Gagal menyimpan file. Silakan coba lagi.');
-            }
-            
-            // Buat instance Intervention Image
-            $webpImage = Image::make($image);
-            
-            // Optimize gambar sebelum konversi
-            if ($webpImage->width() > 2000) {
-                $webpImage->resize(2000, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-            }
-            
-            // Set kualitas WebP (default: 80)
             $quality = $request->input('quality', 80);
-            
-            // Konversi ke WebP dengan penanganan error
-            try {
-                $convertedPath = 'converted/' . $filename . '.webp';
-                Storage::disk('public')->put(
-                    $convertedPath, 
-                    $webpImage->encode('webp', $quality)
-                );
-                
-                // Dapatkan ukuran file hasil konversi
-                $convertedSize = Storage::disk('public')->size($convertedPath);
-                
-                // Simpan data konversi
-                $conversion = auth()->user()->imageConversions()->create([
-                    'original_name' => $originalName,
-                    'original_path' => $originalPath,
-                    'converted_path' => $convertedPath,
-                    'original_format' => strtoupper($originalFormat),
-                    'converted_format' => 'WEBP',
-                    'original_size' => $originalSize,
-                    'converted_size' => $convertedSize
-                ]);
+            $successCount = 0;
+            $totalSaved = 0;
+            $errors = [];
 
-                $savedSize = $originalSize - $convertedSize;
-                $savedPercentage = round(($savedSize / $originalSize) * 100, 1);
+            foreach ($request->file('images') as $image) {
+                try {
+                    if (!$image || !$image->isValid()) {
+                        Log::error('Invalid file upload', [
+                            'error' => $image ? $image->getError() : 'No file',
+                            'error_message' => $image ? $this->getUploadErrorMessage($image->getError()) : 'No file uploaded'
+                        ]);
+                        $errors[] = 'File tidak valid atau rusak: ' . $image->getClientOriginalName();
+                        continue;
+                    }
+
+                    $originalName = $image->getClientOriginalName();
+                    $originalFormat = $image->getClientOriginalExtension();
+                    $originalSize = $image->getSize();
+
+                    // Log informasi file
+                    Log::info('File details', [
+                        'name' => $originalName,
+                        'format' => $originalFormat,
+                        'size' => $originalSize,
+                        'mime' => $image->getMimeType(),
+                        'error' => $image->getError()
+                    ]);
+
+                    // Generate nama unik untuk file
+                    $filename = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '-' . uniqid();
+                    
+                    // Simpan gambar original
+                    $originalPath = $image->storeAs('original', $filename . '.' . $originalFormat, 'public');
+                    if (!$originalPath || !Storage::disk('public')->exists($originalPath)) {
+                        throw new \Exception('Gagal menyimpan file original');
+                    }
+                    
+                    // Buat instance Intervention Image
+                    $webpImage = Image::make($image);
+                    
+                    // Optimize gambar sebelum konversi
+                    if ($webpImage->width() > 2000) {
+                        $webpImage->resize(2000, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+                    }
+                    
+                    // Konversi ke WebP
+                    $convertedPath = 'converted/' . $filename . '.webp';
+                    Storage::disk('public')->put(
+                        $convertedPath, 
+                        $webpImage->encode('webp', $quality)
+                    );
+                    
+                    // Dapatkan ukuran file hasil konversi
+                    $convertedSize = Storage::disk('public')->size($convertedPath);
+                    
+                    // Simpan data konversi
+                    auth()->user()->imageConversions()->create([
+                        'original_name' => $originalName,
+                        'original_path' => $originalPath,
+                        'converted_path' => $convertedPath,
+                        'original_format' => strtoupper($originalFormat),
+                        'converted_format' => 'WEBP',
+                        'original_size' => $originalSize,
+                        'converted_size' => $convertedSize,
+                        'quality' => $quality
+                    ]);
+
+                    $successCount++;
+                    $totalSaved += ($originalSize - $convertedSize);
+
+                } catch (\Exception $e) {
+                    Log::error('Error processing file', [
+                        'file' => $originalName ?? 'unknown',
+                        'error' => $e->getMessage()
+                    ]);
+                    
+                    // Hapus file original jika ada error
+                    if (isset($originalPath)) {
+                        Storage::disk('public')->delete($originalPath);
+                    }
+                    
+                    $errors[] = "Gagal memproses file: " . ($originalName ?? 'unknown');
+                }
+            }
+
+            if ($successCount > 0) {
+                $message = "Berhasil mengkonversi {$successCount} gambar ke WebP! " . 
+                    "Total penghematan ukuran: " . number_format($totalSaved / 1024, 1) . " KB";
+                
+                if (count($errors) > 0) {
+                    $message .= "\n\nBeberapa file gagal diproses:\n" . implode("\n", $errors);
+                    return redirect()->route('conversions.index')
+                        ->with('warning', $message);
+                }
                 
                 return redirect()->route('conversions.index')
-                    ->with('success', "Berhasil mengkonversi gambar '{$originalName}' dari {$originalFormat} ke WebP! " . 
-                        "Ukuran file berkurang dari " . number_format($originalSize / 1024, 1) . " KB menjadi " . 
-                        number_format($convertedSize / 1024, 1) . " KB " .
-                        "(menghemat {$savedPercentage}%)");
-            } catch (\Exception $e) {
-                // Hapus file original jika konversi gagal
-                Storage::disk('public')->delete($originalPath);
-                
-                return redirect()->back()
-                    ->with('error', "Gagal mengkonversi gambar. Silakan coba lagi dengan gambar lain.")
-                    ->withInput();
+                    ->with('success', $message);
             }
-                    
+
+            return redirect()->back()
+                ->with('error', "Gagal mengkonversi semua gambar:\n" . implode("\n", $errors))
+                ->withInput();
+                
         } catch (\Exception $e) {
             Log::error('Upload error', [
                 'message' => $e->getMessage(),

@@ -17,6 +17,7 @@ class ImageConversion extends Model
         'converted_format',
         'original_size',
         'converted_size',
+        'quality',
         'user_id'
     ];
 
