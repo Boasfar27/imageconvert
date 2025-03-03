@@ -80,7 +80,7 @@
                                   this.notificationMessage = `Berhasil menambahkan ${validFiles.length} file (${this.formatFileSize(totalSize)}). Total: ${this.files.length} file.`;
                                   setTimeout(() => {
                                       this.showNotification = false;
-                                  }, 3000);
+                                  }, 5000);
                               },
                               removeFile(index) {
                                   this.files.splice(index, 1);
