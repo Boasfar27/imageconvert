@@ -73,7 +73,13 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Konversi Terakhir</h3>
+                        
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                            Riwayat Konversi
+                        </h3>
                         <a href="{{ route('conversions.create') }}" class="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:from-indigo-700 hover:to-blue-600 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-300 ease-in-out transform hover:scale-105">
                             <span>Konversi Baru</span>
                             <svg class="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,10 +88,42 @@
                         </a>
                     </div>
                     @if($conversions->count() > 0)
+                        <div class="flex flex-col sm:flex-row flex-wrap gap-2 pt-2 pb-4 mb-4 border-b dark:border-gray-700 py-2">
+                            <button onclick="handleDownloadSelected()" class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed" id="downloadSelectedBtn" disabled>
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                <span class="whitespace-nowrap">Download Terpilih</span>
+                            </button>
+                            <button onclick="handleDownloadAll()" class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                <span class="whitespace-nowrap">Download Semua</span>
+                            </button>
+                            <button onclick="confirmDeleteAll()" class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                <span class="whitespace-nowrap">Hapus Semua</span>
+                            </button>
+                            <form id="delete-all-form" action="{{ route('conversions.destroy-all') }}" method="POST" class="hidden">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </div>
                         <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-left">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" 
+                                                   id="selectAll"
+                                                   class="w-4 h-4 text-indigo-600 border-gray-300 rounded cursor-pointer focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600"
+                                                   onchange="handleSelectAll(this)">
+                                        </div>
+                                    </th>
                                     <th class="group px-6 py-3 text-left">
                                         <div class="flex items-center gap-x-2">
                                             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,6 +177,15 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @forelse($conversions as $conversion)
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                                        <td class="px-3 sm:px-6 py-4">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" 
+                                                       name="selected_files[]" 
+                                                       value="{{ $conversion->id }}"
+                                                       class="file-checkbox w-4 h-4 text-indigo-600 border-gray-300 rounded cursor-pointer focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600"
+                                                       onchange="handleCheckboxChange()">
+                                            </div>
+                                        </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-3">
                                                 <span class="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-indigo-100 dark:bg-indigo-900">
@@ -333,6 +380,153 @@
     </style>
 
     <script>
+        function handleSelectAll(checkbox) {
+            const fileCheckboxes = document.querySelectorAll('.file-checkbox');
+            fileCheckboxes.forEach(item => {
+                item.checked = checkbox.checked;
+            });
+            handleCheckboxChange();
+        }
+
+        function handleCheckboxChange() {
+            const selectedFiles = document.querySelectorAll('.file-checkbox:checked');
+            const downloadSelectedBtn = document.getElementById('downloadSelectedBtn');
+            
+            if (selectedFiles.length > 0) {
+                downloadSelectedBtn.disabled = false;
+            } else {
+                downloadSelectedBtn.disabled = true;
+            }
+
+            // Update selectAll checkbox
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const allCheckboxes = document.querySelectorAll('.file-checkbox');
+            selectAllCheckbox.checked = selectedFiles.length === allCheckboxes.length;
+            selectAllCheckbox.indeterminate = selectedFiles.length > 0 && selectedFiles.length < allCheckboxes.length;
+        }
+
+        function handleDownloadSelected() {
+            const selectedFiles = Array.from(document.querySelectorAll('.file-checkbox:checked')).map(cb => cb.value);
+            
+            if (selectedFiles.length === 0) {
+                Swal.fire({
+                    title: 'Peringatan',
+                    text: 'Silakan pilih file yang ingin didownload',
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Konfirmasi Download',
+                text: `Anda akan mendownload ${selectedFiles.length} file terpilih`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Download!',
+                cancelButtonText: 'Batal',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '{{ route("conversions.download-selected") }}';
+                        
+                        const csrfToken = document.createElement('input');
+                        csrfToken.type = 'hidden';
+                        csrfToken.name = '_token';
+                        csrfToken.value = '{{ csrf_token() }}';
+                        form.appendChild(csrfToken);
+
+                        selectedFiles.forEach(fileId => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'selected_files[]';
+                            input.value = fileId;
+                            form.appendChild(input);
+                        });
+
+                        document.body.appendChild(form);
+                        form.submit();
+                        
+                        setTimeout(() => {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'File sedang didownload',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            resolve();
+                        }, 1000);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+
+        function handleDownloadAll() {
+            Swal.fire({
+                title: 'Konfirmasi Download',
+                text: 'Anda akan mendownload semua file',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Download Semua!',
+                cancelButtonText: 'Batal',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        window.location.href = '{{ route("conversions.download-all") }}';
+                        setTimeout(() => {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'Semua file sedang didownload',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            resolve();
+                        }, 1000);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+
+        function handleDownload(url) {
+            Swal.fire({
+                title: 'Konfirmasi Download',
+                text: 'File akan segera diunduh',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Download!',
+                cancelButtonText: 'Batal',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        window.location.href = url;
+                        setTimeout(() => {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'File sedang didownload',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            resolve();
+                        }, 1000);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+
         function confirmDelete(id, filename) {
             Swal.fire({
                 title: 'Konfirmasi Hapus',
@@ -350,15 +544,22 @@
             });
         }
 
-        function handleDownload(url) {
+        function confirmDeleteAll() {
             Swal.fire({
-                title: 'Memulai Download',
-                text: 'File akan segera diunduh',
-                icon: 'info',
-                timer: 1500,
-                showConfirmButton: false,
-                willClose: () => {
-                    window.location.href = url;
+                title: 'Konfirmasi Hapus Semua',
+                text: 'Apakah Anda yakin ingin menghapus semua file? Tindakan ini tidak dapat dibatalkan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Hapus Semua!',
+                cancelButtonText: 'Batal',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        document.getElementById('delete-all-form').submit();
+                        resolve();
+                    });
                 }
             });
         }

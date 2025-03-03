@@ -40,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/conversions', [ImageConversionController::class, 'store'])->name('conversions.store');
     Route::get('/conversions/{conversion}/download', [ImageConversionController::class, 'download'])->name('conversions.download');
     Route::delete('/conversions/{conversion}', [ImageConversionController::class, 'destroy'])->name('conversions.destroy');
+    Route::post('/conversions/download-selected', [ImageConversionController::class, 'downloadSelected'])->name('conversions.download-selected');
+    Route::get('/conversions/download-all', [ImageConversionController::class, 'downloadAll'])->name('conversions.download-all');
+    Route::delete('/conversions', [ImageConversionController::class, 'destroyAll'])->name('conversions.destroy-all');
 });
 
 require __DIR__.'/auth.php';

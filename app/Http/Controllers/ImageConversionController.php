@@ -274,4 +274,104 @@ class ImageConversionController extends Controller
         return redirect()->route('conversions.index')
             ->with('success', 'File konversi berhasil dihapus.');
     }
+
+    public function downloadSelected(Request $request)
+    {
+        $request->validate([
+            'selected_files' => 'required|array',
+            'selected_files.*' => 'exists:image_conversions,id'
+        ]);
+
+        $conversions = ImageConversion::whereIn('id', $request->selected_files)
+            ->where('user_id', auth()->id())
+            ->get();
+
+        if ($conversions->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada file yang dipilih untuk diunduh.');
+        }
+
+        $zip = new \ZipArchive();
+        $zipName = 'converted_images_' . date('Y-m-d_H-i-s') . '.zip';
+        $zipPath = storage_path('app/public/temp/' . $zipName);
+
+        // Buat direktori temp jika belum ada
+        if (!Storage::disk('public')->exists('temp')) {
+            Storage::disk('public')->makeDirectory('temp');
+        }
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+            foreach ($conversions as $conversion) {
+                $filePath = Storage::disk('public')->path($conversion->converted_path);
+                if (file_exists($filePath)) {
+                    $zip->addFile(
+                        $filePath,
+                        pathinfo($conversion->original_name, PATHINFO_FILENAME) . '.webp'
+                    );
+                }
+            }
+            $zip->close();
+
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        }
+
+        return redirect()->back()->with('error', 'Gagal membuat file zip.');
+    }
+
+    public function downloadAll()
+    {
+        $conversions = auth()->user()->imageConversions;
+
+        if ($conversions->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada file untuk diunduh.');
+        }
+
+        $zip = new \ZipArchive();
+        $zipName = 'all_converted_images_' . date('Y-m-d_H-i-s') . '.zip';
+        $zipPath = storage_path('app/public/temp/' . $zipName);
+
+        // Buat direktori temp jika belum ada
+        if (!Storage::disk('public')->exists('temp')) {
+            Storage::disk('public')->makeDirectory('temp');
+        }
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+            foreach ($conversions as $conversion) {
+                $filePath = Storage::disk('public')->path($conversion->converted_path);
+                if (file_exists($filePath)) {
+                    $zip->addFile(
+                        $filePath,
+                        pathinfo($conversion->original_name, PATHINFO_FILENAME) . '.webp'
+                    );
+                }
+            }
+            $zip->close();
+
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        }
+
+        return redirect()->back()->with('error', 'Gagal membuat file zip.');
+    }
+
+    public function destroyAll()
+    {
+        $conversions = auth()->user()->imageConversions;
+
+        if ($conversions->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada file untuk dihapus.');
+        }
+
+        foreach ($conversions as $conversion) {
+            // Hapus file fisik
+            Storage::disk('public')->delete([
+                $conversion->original_path,
+                $conversion->converted_path
+            ]);
+        }
+
+        // Hapus semua record dari database
+        auth()->user()->imageConversions()->delete();
+
+        return redirect()->route('conversions.index')
+            ->with('success', 'Semua file konversi berhasil dihapus.');
+    }
 }
