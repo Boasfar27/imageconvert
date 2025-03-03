@@ -36,7 +36,17 @@
                               quality: 80,
                               files: [],
                               isLoading: false,
-                              maxFiles: 5,
+                              showNotification: false,
+                              notificationMessage: '',
+                              formatFileSize(size) {
+                                  const units = ['B', 'KB', 'MB', 'GB'];
+                                  let i = 0;
+                                  while (size >= 1024 && i < units.length - 1) {
+                                      size /= 1024;
+                                      i++;
+                                  }
+                                  return size.toFixed(2) + ' ' + units[i];
+                              },
                               handleFiles(event) {
                                   let newFiles;
                                   if (event.dataTransfer) {
@@ -48,23 +58,29 @@
                                   // Convert FileList to Array for easier manipulation
                                   const filesArray = Array.from(newFiles);
                                   
-                                  // Filter only images and check max files
+                                  // Filter only images
                                   const validFiles = filesArray.filter(file => {
                                       return file.type.match('image/jpeg') || file.type.match('image/png');
-                                  }).slice(0, this.maxFiles - this.files.length);
-                                  
-                                  if (validFiles.length + this.files.length > this.maxFiles) {
-                                      alert('Maksimum ' + this.maxFiles + ' file yang diperbolehkan');
-                                  }
+                                  });
                                   
                                   // Add valid files to our files array
-                                  this.files = [...this.files, ...validFiles].slice(0, this.maxFiles);
+                                  this.files = [...this.files, ...validFiles];
                                   
                                   // Update file input
                                   const fileInput = this.$refs.fileInput;
                                   const dataTransfer = new DataTransfer();
                                   this.files.forEach(file => dataTransfer.items.add(file));
                                   fileInput.files = dataTransfer.files;
+
+                                  // Hitung total ukuran file
+                                  const totalSize = validFiles.reduce((sum, file) => sum + file.size, 0);
+                                  
+                                  // Tampilkan notifikasi sukses
+                                  this.showNotification = true;
+                                  this.notificationMessage = `Berhasil menambahkan ${validFiles.length} file (${this.formatFileSize(totalSize)}). Total: ${this.files.length} file.`;
+                                  setTimeout(() => {
+                                      this.showNotification = false;
+                                  }, 3000);
                               },
                               removeFile(index) {
                                   this.files.splice(index, 1);
@@ -74,9 +90,6 @@
                                   const dataTransfer = new DataTransfer();
                                   this.files.forEach(file => dataTransfer.items.add(file));
                                   fileInput.files = dataTransfer.files;
-                              },
-                              formatFileSize(size) {
-                                  return (size / (1024 * 1024)).toFixed(2) + ' MB';
                               }
                           }"
                           @submit="isLoading = true"
@@ -86,9 +99,22 @@
                         @csrf
 
                         <div class="space-y-2">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Select Images (JPG or PNG, max 5 files, max 100MB each)
-                            </label>
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Select Images (JPG or PNG, max 100MB each)
+                                </label>
+                                <!-- Badge Total Files -->
+                                <div x-show="files.length > 0" 
+                                     x-transition:enter="transition ease-out duration-300"
+                                     x-transition:enter-start="opacity-0 transform scale-95"
+                                     x-transition:enter-end="opacity-100 transform scale-100"
+                                     class="inline-flex items-center justify-center px-3 sm:px-5 py-1 rounded-full text-xs sm:text-sm font-medium bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-white w-full sm:w-auto">
+                                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    <span x-text="files.length + ' file' + (files.length > 1 ? 's' : '')"></span>
+                                </div>
+                            </div>
                             
                             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 transition-colors duration-200" 
                                 :class="{'border-gray-300 dark:border-gray-600': !dragOver, 'border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-900/20': dragOver}"
@@ -112,7 +138,7 @@
                                         <p class="pl-1">or drag and drop</p>
                                     </div>
                                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        JPG or PNG up to 100MB each (max 5 files)
+                                        JPG or PNG up to 100MB each
                                     </p>
                                 </div>
                             </div>
@@ -136,6 +162,23 @@
                                         </button>
                                     </div>
                                 </template>
+                            </div>
+
+                            <!-- Notification -->
+                            <div x-show="showNotification" 
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 transform translate-y-2"
+                                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                                 x-transition:leave="transition ease-in duration-300"
+                                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                                 x-transition:leave-end="opacity-0 transform translate-y-2"
+                                 class="fixed bottom-4 right-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 z-50">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span class="text-sm text-gray-700 dark:text-gray-300" x-text="notificationMessage"></span>
+                                </div>
                             </div>
 
                             @error('images.*')

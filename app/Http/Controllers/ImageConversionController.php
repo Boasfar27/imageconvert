@@ -72,7 +72,7 @@ class ImageConversionController extends Controller
 
             // Validasi dasar
             $request->validate([
-                'images' => 'required|array|max:5',
+                'images' => 'required|array',
                 'images.*' => [
                     'required',
                     'file',
@@ -84,7 +84,6 @@ class ImageConversionController extends Controller
             ], [
                 'images.required' => 'Silakan pilih file gambar.',
                 'images.array' => 'Format upload tidak valid.',
-                'images.max' => 'Maksimum 5 file yang diperbolehkan.',
                 'images.*.required' => 'File gambar tidak boleh kosong.',
                 'images.*.file' => 'Upload gagal. Silakan coba lagi.',
                 'images.*.image' => 'File harus berupa gambar.',
