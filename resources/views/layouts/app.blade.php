@@ -7,6 +7,16 @@
 
         <title>{{ config('app.name', 'ImageConverter') }}</title>
 
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-D4F7LPJRVW"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-D4F7LPJRVW');
+        </script>
+
         <!-- Google AdSense -->
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7311209549685817"
      crossorigin="anonymous"></script>
