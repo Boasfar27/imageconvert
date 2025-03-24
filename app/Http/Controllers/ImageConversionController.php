@@ -48,6 +48,15 @@ class ImageConversionController extends Controller
     public function store(Request $request)
     {
         try {
+            // Cek limit konversi untuk regular user
+            $user = auth()->user();
+            if ($user->hasReachedConversionLimit()) {
+                // Redirect dengan pesan error
+                return redirect()->back()
+                    ->with('error', 'Anda telah mencapai batas konversi. Silakan lakukan donasi untuk menambah limit konversi atau upgrade ke premium.')
+                    ->withInput();
+            }
+            
             // Log informasi request dan konfigurasi
             Log::info('Upload attempt - Detailed', [
                 'files_count' => $request->hasFile('images') ? count($request->file('images')) : 'No files',
