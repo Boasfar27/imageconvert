@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RegisteredUserController extends Controller
 {
@@ -32,18 +33,10 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         try {
-            Log::info('Registration attempt started');
-            
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
-
-            Log::info('Validation passed successfully');
-            Log::info('Creating new user with data:', [
-                'name' => $request->name,
-                'email' => $request->email
             ]);
 
             $user = User::create([
@@ -52,19 +45,27 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            Log::info('User created successfully with ID: ' . $user->id);
-            Log::info('Firing Registered event');
-
-            event(new Registered($user));
-
-            Log::info('Logging in user');
             Auth::login($user);
+            
+            // Trigger the verification email
+            $user->sendEmailVerificationNotification();
 
-            Log::info('Registration completed successfully, redirecting to home');
-            return redirect(RouteServiceProvider::HOME);
+            Alert::success('Registration Successful', 'Your account has been created successfully. Please verify your email address.')
+                ->toast()
+                ->position('top-end')
+                ->timerProgressBar()
+                ->autoClose(5000);
+
+            return redirect()->route('verification.notice');
         } catch (\Exception $e) {
             Log::error('Registration failed: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
+            
+            Alert::error('Registration Failed', 'There was a problem creating your account. Please try again.')
+                ->toast()
+                ->position('top-end')
+                ->timerProgressBar()
+                ->autoClose(5000);
+            
             return back()->withErrors(['error' => 'Registration failed. Please try again.'])->withInput();
         }
     }

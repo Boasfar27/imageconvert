@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageConversionController;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 Route::get('/', function () {
     return view('landing');
@@ -27,6 +28,11 @@ Route::middleware(['auth'])->group(function () {
         $todayConversions = $user->imageConversions()
             ->whereDate('created_at', today())
             ->count();
+        
+        // Check if the user just verified their email
+        if (request()->query('verified') == 1) {
+            Alert::success('Verification Successful', 'Your email has been successfully verified. You now have full access to all features!');
+        }
             
         return view('dashboard', compact('conversions', 'totalSizeReduction', 'todayConversions', 'totalConversions'));
     })->name('dashboard');

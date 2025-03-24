@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class NewPasswordController extends Controller
 {
@@ -50,6 +51,14 @@ class NewPasswordController extends Controller
                 event(new PasswordReset($user));
             }
         );
+
+        if ($status == Password::PASSWORD_RESET) {
+            Alert::success('Password Reset Successfully', 'Your password has been changed. You can now log in with your new password.')
+                ->toast()
+                ->position('top-end')
+                ->timerProgressBar()
+                ->autoClose(5000);
+        }
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
