@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSS Test</title>
+    <link rel="stylesheet" href="build/assets/app-DPbV5EVT.css">
+    <style>
+        .box {
+            padding: 2rem;
+            margin: 2rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-blue-500 text-white box">
+        <h1 class="text-2xl font-bold">CSS Test</h1>
+        <p>Jika kotak ini berwarna biru dan teks ini putih, maka CSS Tailwind berhasil dimuat!</p>
+    </div>
+
+    <div class="bg-green-500 text-white box">
+        <h2 class="text-xl font-semibold">Test Lainnya</h2>
+        <p>Kotak ini harusnya berwarna hijau jika CSS berfungsi dengan benar.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('JavaScript berfungsi!');
+            
+            // Tambahkan elemen baru ke halaman
+            const newBox = document.createElement('div');
+            newBox.className = 'bg-yellow-500 text-black box';
+            newBox.innerHTML = '<h2 class="text-xl font-semibold">JavaScript Test</h2><p>Kotak ini dibuat oleh JavaScript, menunjukkan JS berfungsi!</p>';
+            document.body.appendChild(newBox);
+        });
+    </script>
+</body>
+</html> 

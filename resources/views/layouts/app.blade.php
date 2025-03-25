@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
     <title>{{ config('app.name', 'ImageConverter') }}</title>
 
@@ -33,7 +34,26 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php
+        $manifestPath = public_path('build/manifest.json');
+        $assetExists = file_exists($manifestPath);
+        $manifest = $assetExists ? json_decode(file_get_contents($manifestPath), true) : null;
+        $cssFile =
+            $manifest && isset($manifest['resources/css/app.css']['file'])
+                ? 'build/' . $manifest['resources/css/app.css']['file']
+                : 'build/assets/app-DPbV5EVT.css';
+        $jsFile =
+            $manifest && isset($manifest['resources/js/app.js']['file'])
+                ? 'build/' . $manifest['resources/js/app.js']['file']
+                : 'build/assets/app-DQNOlDuK.js';
+    @endphp
+
+    @if (app()->environment('local'))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <link rel="stylesheet" href="{{ asset($cssFile) }}">
+        <script src="{{ asset($jsFile) }}" defer></script>
+    @endif
 
     <!-- Include SweetAlert Toast -->
     @include('sweetalert::alert')

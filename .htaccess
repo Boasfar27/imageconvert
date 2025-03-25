@@ -1,0 +1,24 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule ^$ public/ [L]
+    RewriteRule (.*) public/$1 [L]
+</IfModule>
+
+# Enforce HTTPS
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# PHP Settings
+<IfModule mod_php.c>
+    php_value upload_max_filesize 100M
+    php_value post_max_size 100M
+    php_value memory_limit 256M
+    php_value max_execution_time 300
+</IfModule>
+
+# Alias untuk direktori build
+<IfModule mod_alias.c>
+    Alias /build /public/build
+</IfModule>

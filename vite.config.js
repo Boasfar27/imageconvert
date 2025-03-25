@@ -11,4 +11,16 @@ export default defineConfig({
             refresh: true
         }),
     ],
+    build: {
+        // Generate manifest.json in outDir
+        manifest: true,
+        rollupOptions: {
+            // Externalize deps that shouldn't be bundled
+            external: [
+                // Add any other externals if needed
+            ],
+        },
+    },
+    // Use a fixed base path in production
+    base: process.env.APP_ENV === 'production' ? '/build/' : '',
 });

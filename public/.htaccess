@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Enforce HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -22,8 +26,6 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-
-    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
 # PHP Settings
@@ -55,6 +57,21 @@ php_value suhosin.get.max_vars 1000
 php_value output_buffering 4096
 php_value realpath_cache_size 4096k
 php_value realpath_cache_ttl 7200
+
+# Add headers for security
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Allow cross-domain for assets if needed
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|ttf|otf|eot|woff|woff2|gif|png|jpe?g|svg|svgz|ico|webp)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
 
 # If using nginx, add these to your nginx.conf:
 # client_max_body_size 100M;
