@@ -9,13 +9,13 @@
                 <svg class="w-6 h-6 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                {{ __('Konversi Gambar') }}
+                {{ __('Image Conversion') }}
             </h2>
             <div class="flex items-center text-sm text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm">
                 <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                Total Dihemat: <span class="font-semibold ml-1">{{ DateHelper::formatSize($totalSaved) }}</span>
+                Total Saved: <span class="font-semibold ml-1">{{ DateHelper::formatSize($totalSaved) }}</span>
             </div>
         </div>
     </x-slot>
@@ -29,13 +29,13 @@
                             <svg class="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
-                            Riwayat Konversi
+                            Conversion History
                         </h3>
                         <a href="{{ route('conversions.create') }}" class="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 border border-transparent rounded-lg font-medium text-sm text-white shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
-                            Konversi Baru
+                            New Conversion
                             <svg class="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>
@@ -47,19 +47,19 @@
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                 </svg>
-                                <span class="whitespace-nowrap">Download Terpilih</span>
+                                <span class="whitespace-nowrap">Download Selected</span>
                             </button>
                             <button onclick="handleDownloadAll()" class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                 </svg>
-                                <span class="whitespace-nowrap">Download Semua</span>
+                                <span class="whitespace-nowrap">Download All</span>
                             </button>
                             <button onclick="confirmDeleteAll()" class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
-                                <span class="whitespace-nowrap">Hapus Semua</span>
+                                <span class="whitespace-nowrap">Delete All</span>
                             </button>
                             <form id="delete-all-form" action="{{ route('conversions.destroy-all') }}" method="POST" class="hidden">
                                 @csrf
@@ -208,10 +208,10 @@
                                                             </svg>
                                                             <div>
                                                                 <span class="text-green-600 dark:text-green-400 font-medium">
-                                                                    {{ number_format($reduction, 1) }}% lebih kecil
+                                                                    {{ number_format($reduction, 1) }}% smaller 
                                                                 </span>
                                                                 <span class="text-gray-500 dark:text-gray-400 text-sm block">
-                                                                    {{ DateHelper::formatSize($savedSize) }} tersimpan
+                                                                    {{ DateHelper::formatSize($savedSize) }} saved
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -290,8 +290,8 @@
                                 
                                 if (selectedFiles.length === 0) {
                                     Swal.fire({
-                                        title: 'Peringatan',
-                                        text: 'Silakan pilih file yang ingin didownload',
+                                        title: 'Warning',
+                                        text: 'Please select the files you want to download',
                                         icon: 'warning',
                                         confirmButtonColor: '#3085d6'
                                     });
@@ -299,14 +299,14 @@
                                 }
 
                                 Swal.fire({
-                                    title: 'Konfirmasi Download',
-                                    text: `Anda akan mendownload ${selectedFiles.length} file terpilih`,
+                                    title: 'Confirm Download',
+                                    text: `You will download ${selectedFiles.length} selected files`,
                                     icon: 'question',
                                     showCancelButton: true,
                                     confirmButtonColor: '#3085d6',
                                     cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Ya, Download!',
-                                    cancelButtonText: 'Batal',
+                                    confirmButtonText: 'Yes, Download!',
+                                    cancelButtonText: 'Cancel',
                                     showLoaderOnConfirm: true,
                                     preConfirm: () => {
                                         return new Promise((resolve) => {
@@ -333,8 +333,8 @@
                                             
                                             setTimeout(() => {
                                                 Swal.fire({
-                                                    title: 'Berhasil!',
-                                                    text: 'File sedang didownload',
+                                                    title: 'Success!',
+                                                    text: 'The file is being downloaded',
                                                     icon: 'success',
                                                     timer: 2000,
                                                     showConfirmButton: false
@@ -349,22 +349,22 @@
 
                             function handleDownloadAll() {
                                 Swal.fire({
-                                    title: 'Konfirmasi Download',
-                                    text: 'Anda akan mendownload semua file',
+                                    title: 'Confirm Download',
+                                    text: 'You will download all files',
                                     icon: 'question',
                                     showCancelButton: true,
                                     confirmButtonColor: '#3085d6',
                                     cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Ya, Download Semua!',
-                                    cancelButtonText: 'Batal',
+                                    confirmButtonText: 'Yes, Download All!',
+                                    cancelButtonText: 'Cancel',
                                     showLoaderOnConfirm: true,
                                     preConfirm: () => {
                                         return new Promise((resolve) => {
                                             window.location.href = '{{ route("conversions.download-all") }}';
                                             setTimeout(() => {
                                                 Swal.fire({
-                                                    title: 'Berhasil!',
-                                                    text: 'Semua file sedang didownload',
+                                                    title: 'Success!',
+                                                    text: 'All files are being downloaded',
                                                     icon: 'success',
                                                     timer: 2000,
                                                     showConfirmButton: false
@@ -379,22 +379,22 @@
 
                             function handleDownload(url) {
                                 Swal.fire({
-                                    title: 'Konfirmasi Download',
-                                    text: 'File akan segera diunduh',
+                                    title: 'Confirm Download',
+                                    text: 'The file will be downloaded soon',
                                     icon: 'question',
                                     showCancelButton: true,
                                     confirmButtonColor: '#3085d6',
                                     cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Ya, Download!',
-                                    cancelButtonText: 'Batal',
+                                    confirmButtonText: 'Yes, Download!',
+                                    cancelButtonText: 'Cancel',
                                     showLoaderOnConfirm: true,
                                     preConfirm: () => {
                                         return new Promise((resolve) => {
                                             window.location.href = url;
                                             setTimeout(() => {
                                                 Swal.fire({
-                                                    title: 'Berhasil!',
-                                                    text: 'File sedang didownload',
+                                                    title: 'Success!',
+                                                    text: 'The file is being downloaded',
                                                     icon: 'success',
                                                     timer: 2000,
                                                     showConfirmButton: false
@@ -409,14 +409,14 @@
 
                             function confirmDelete(id, filename) {
                                 Swal.fire({
-                                    title: 'Konfirmasi Hapus',
-                                    text: `Apakah Anda yakin ingin menghapus gambar "${filename}"?`,
+                                    title: 'Confirm Delete',
+                                    text: `Are you sure you want to delete the image "${filename}"?`,
                                     icon: 'warning',
                                     showCancelButton: true,
                                     confirmButtonColor: '#ef4444',
                                     cancelButtonColor: '#6b7280',
-                                    confirmButtonText: 'Ya, Hapus!',
-                                    cancelButtonText: 'Batal'
+                                    confirmButtonText: 'Yes, Delete!',
+                                    cancelButtonText: 'Cancel'
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         document.getElementById(`delete-form-${id}`).submit();
@@ -426,14 +426,14 @@
 
                             function confirmDeleteAll() {
                                 Swal.fire({
-                                    title: 'Konfirmasi Hapus Semua',
-                                    text: 'Apakah Anda yakin ingin menghapus semua file? Tindakan ini tidak dapat dibatalkan!',
+                                    title: 'Confirm Delete All',
+                                    text: 'Are you sure you want to delete all files? This action cannot be undone!',
                                     icon: 'warning',
                                     showCancelButton: true,
                                     confirmButtonColor: '#ef4444',
                                     cancelButtonColor: '#6b7280',
-                                    confirmButtonText: 'Ya, Hapus Semua!',
-                                    cancelButtonText: 'Batal',
+                                    confirmButtonText: 'Yes, Delete All!',
+                                    cancelButtonText: 'Cancel',
                                     showLoaderOnConfirm: true,
                                     preConfirm: () => {
                                         return new Promise((resolve) => {
@@ -457,9 +457,9 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <h3 class="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">Belum Ada Konversi</h3>
+                                        <h3 class="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">No Conversion Yet</h3>
                                         <p class="mt-3 text-gray-500 dark:text-gray-400 text-center">
-                                            Mulai mengoptimalkan gambar Anda dengan mengkonversi ke format WebP untuk performa web yang lebih baik.
+                                            Start optimizing your images by converting them to WebP format for better web performance.
                                         </p>
                                         <div class="mt-8">
                                             <a href="{{ route('conversions.create') }}" 
@@ -468,17 +468,17 @@
                                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                                 </svg>
-                                                Mulai Konversi
+                                                Start Conversion
                                             </a>
                                         </div>
                                         <div class="mt-6 grid grid-cols-2 gap-4 text-center text-sm">
                                             <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Format WebP</p>
-                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Kompresi modern</p>
+                                                <p class="font-semibold text-gray-900 dark:text-gray-100">WebP Format</p>
+                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Modern Compression</p>
                                             </div>
                                             <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Hemat Ruang</p>
-                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Hingga 30%</p>
+                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Storage Saving</p>
+                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Up to 30%</p>
                                             </div>
                                         </div>
                                     </div>

@@ -20,15 +20,14 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Konversi</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Conversion</h3>
                         <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $totalConversions }}</p>
                     </div>
                 </div>
 
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Penyimpanan
-                            Dihemat</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Storage Saved</h3>
                         <p class="text-3xl font-bold text-green-600 dark:text-green-400">
                             {{ DateHelper::formatSize($totalSizeReduction) }}</p>
                     </div>
@@ -38,9 +37,9 @@
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                             @if ($isLimited)
-                                Sisa Konversi
+                            Conversion Remainder
                             @else
-                                Status Akun
+                            Account Status
                             @endif
                         </h3>
                         @if ($isLimited)
@@ -49,7 +48,7 @@
                                     {{ $remainingConversions }}</p>
                                 <a href="{{ route('donations.index') }}"
                                     class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-3 py-1.5 rounded-md transition-colors duration-150 ease-in-out">
-                                    Tingkatkan
+                                    Upgrade
                                 </a>
                             </div>
                         @else
@@ -71,7 +70,7 @@
             {{-- Panduan Cepat --}}
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Panduan Cepat</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Quick Guide</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex items-start space-x-4">
                             <div class="flex-shrink-0">
@@ -83,9 +82,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="text-md font-medium text-gray-900 dark:text-gray-100">Konversi Gambar</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Klik "Image Converter" di menu untuk
-                                    mulai mengkonversi gambar ke format WebP.</p>
+                                <h4 class="text-md font-medium text-gray-900 dark:text-gray-100">Image Converter</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Click "Image Converter" in the menu to start converting images to WebP format.</p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-4">
@@ -97,9 +95,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="text-md font-medium text-gray-900 dark:text-gray-100">Hemat Penyimpanan</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Format WebP menghemat hingga 30%
-                                    ukuran file tanpa mengurangi kualitas.</p>
+                                <h4 class="text-md font-medium text-gray-900 dark:text-gray-100">Storage Saving</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">WebP format saves up to 30% of file size without reducing quality.</p>
                             </div>
                         </div>
                     </div>
@@ -117,11 +114,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
-                            Riwayat Konversi
+                            Conversion History
                         </h3>
                         <a href="{{ route('conversions.create') }}"
                             class="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:from-indigo-700 hover:to-blue-600 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-300 ease-in-out transform hover:scale-105">
-                            <span>Konversi Baru</span>
+                            <span>New Conversion</span>
                             <svg class="w-4 h-4 ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-1"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -139,7 +136,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                 </svg>
-                                <span class="whitespace-nowrap">Download Terpilih</span>
+                                <span class="whitespace-nowrap">Download Selected</span>
                             </button>
                             <button onclick="handleDownloadAll()"
                                 class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
@@ -147,7 +144,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                 </svg>
-                                <span class="whitespace-nowrap">Download Semua</span>
+                                <span class="whitespace-nowrap">Download All</span>
                             </button>
                             <button onclick="confirmDeleteAll()"
                                 class="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
@@ -156,7 +153,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
-                                <span class="whitespace-nowrap">Hapus Semua</span>
+                                    <span class="whitespace-nowrap">Delete All</span>
                             </button>
                             <form id="delete-all-form" action="{{ route('conversions.destroy-all') }}" method="POST"
                                 class="hidden">
@@ -322,10 +319,10 @@
                                                     </svg>
                                                     <div>
                                                         <span class="text-green-600 dark:text-green-400 font-medium">
-                                                            {{ number_format($reduction, 1) }}% lebih kecil
+                                                            {{ number_format($reduction, 1) }}% smaller
                                                         </span>
                                                         <span class="text-gray-500 dark:text-gray-400 text-sm block">
-                                                            {{ DateHelper::formatSize($savedSize) }} tersimpan
+                                                            {{ DateHelper::formatSize($savedSize) }} saved
                                                         </span>
                                                     </div>
                                                 </div>
@@ -392,11 +389,10 @@
                                                             </div>
                                                             <h3
                                                                 class="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                                                Belum Ada Konversi</h3>
-                                                            <p
-                                                                class="mt-3 text-gray-500 dark:text-gray-400 text-center">
-                                                                Mulai mengoptimalkan gambar Anda dengan mengkonversi ke
-                                                                format WebP untuk performa web yang lebih baik.
+                                                                No Conversion Yet</h3>
+                                                            <p class="mt-3 text-gray-500 dark:text-gray-400 text-center">
+                                                                Start optimizing your images by converting them to WebP
+                                                                format for better web performance.
                                                             </p>
                                                             <div class="mt-8">
                                                                 <a href="{{ route('conversions.create') }}"
@@ -409,7 +405,7 @@
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M12 4v16m8-8H4" />
                                                                     </svg>
-                                                                    Mulai Konversi
+                                                                    Start Conversion
                                                                 </a>
                                                             </div>
                                                             <div
@@ -418,17 +414,17 @@
                                                                     class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                                                                     <p
                                                                         class="font-semibold text-gray-900 dark:text-gray-100">
-                                                                        Format WebP</p>
+                                                                        WebP Format</p>
                                                                     <p class="mt-1 text-gray-500 dark:text-gray-400">
-                                                                        Kompresi modern</p>
+                                                                        Modern Compression</p>
                                                                 </div>
                                                                 <div
                                                                     class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                                                                     <p
                                                                         class="font-semibold text-gray-900 dark:text-gray-100">
-                                                                        Hemat Ruang</p>
+                                                                        Storage Saving</p>
                                                                     <p class="mt-1 text-gray-500 dark:text-gray-400">
-                                                                        Hingga 30%</p>
+                                                                        Up to 30%</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -465,11 +461,11 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <h3 class="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">Belum
-                                            Ada Konversi</h3>
+                                        <h3 class="mt-6 text-xl font-semibold text-gray-900 dark:text-gray-100">No
+                                            Conversion Yet</h3>
                                         <p class="mt-3 text-gray-500 dark:text-gray-400 text-center">
-                                            Mulai mengoptimalkan gambar Anda dengan mengkonversi ke format WebP untuk
-                                            performa web yang lebih baik.
+                                            Start optimizing your images by converting them to WebP format for better
+                                            web performance.
                                         </p>
                                         <div class="mt-8">
                                             <a href="{{ route('conversions.create') }}"
@@ -481,19 +477,19 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M12 4v16m8-8H4" />
                                                 </svg>
-                                                Mulai Konversi
+                                                Start Conversion
                                             </a>
                                         </div>
                                         <div class="mt-6 grid grid-cols-2 gap-4 text-center text-sm">
                                             <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Format WebP
+                                                <p class="font-semibold text-gray-900 dark:text-gray-100">WebP Format
                                                 </p>
-                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Kompresi modern</p>
+                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Modern Compression</p>
                                             </div>
                                             <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Hemat Ruang
+                                                <p class="font-semibold text-gray-900 dark:text-gray-100">Storage Saving
                                                 </p>
-                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Hingga 30%</p>
+                                                <p class="mt-1 text-gray-500 dark:text-gray-400">Up to 30%</p>
                                             </div>
                                         </div>
                                     </div>
