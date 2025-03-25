@@ -151,14 +151,14 @@
                         <div class="mt-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                             <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes:</h4>
                             <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400">
-                                <li>Donasi akan diproses dalam waktu 1x24 jam</li>
-                                <li>Jika status donasi <span
-                                        class="font-medium text-yellow-600 dark:text-yellow-400">Pending</span>, harap
-                                    tunggu persetujuan admin</li>
-                                <li>Jika status donasi <span
-                                        class="font-medium text-red-600 dark:text-red-400">Rejected</span>, silakan
-                                    hubungi admin untuk informasi lebih lanjut</li>
-                                <li>Untuk bantuan, hubungi admin di admin@imageconverter.com</li>
+                                <li>Donations will be processed within 1x24 hours</li>
+                                <li>If donation status is <span
+                                        class="font-medium text-yellow-600 dark:text-yellow-400">Pending</span>, please
+                                    wait for admin approval</li>
+                                <li>If donation status is <span
+                                        class="font-medium text-red-600 dark:text-red-400">Rejected</span>, please
+                                    contact admin for more information</li>
+                                <li>For assistance, contact admin at muhammadfarhan2747@gmail.com</li>
                             </ul>
                         </div>
                     @endif

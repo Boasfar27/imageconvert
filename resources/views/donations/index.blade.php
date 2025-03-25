@@ -104,14 +104,13 @@
                                     </div>
                                     <div class="ml-3">
                                         <p class="text-sm font-medium">
-                                            Anda memiliki {{ count($pendingDonations) }} permintaan dalam proses
-                                            persetujuan.
+                                            You have {{ count($pendingDonations) }} requests in process
+                                            approval.
                                         </p>
                                         <p class="text-xs mt-1">
-                                            Silakan tunggu hingga admin menyetujui permintaan Anda. Lihat riwayat
-                                            permintaan di
+                                            Please wait for admin approval. See donation history at
                                             <a href="{{ route('donations.history') }}"
-                                                class="font-medium underline">riwayat donasi</a>.
+                                                class="font-medium underline">donation history</a>.
                                         </p>
                                     </div>
                                 </div>
@@ -154,7 +153,7 @@
                                         <div class="mb-6">
                                             <label for="payment_proof"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                                Bukti Pembayaran (Screenshot)
+                                                Payment Proof (Screenshot)
                                             </label>
                                             <input type="file" name="payment_proof" id="payment_proof"
                                                 accept="image/*" required
@@ -229,7 +228,7 @@
                                         <div class="mb-6">
                                             <label for="payment_proof_upgrade"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                                Bukti Pembayaran (Screenshot)
+                                                Payment Proof (Screenshot)
                                             </label>
                                             <input type="file" name="payment_proof" id="payment_proof_upgrade"
                                                 accept="image/*" required
@@ -260,30 +259,30 @@
                         <div
                             class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                             <div class="p-6">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Cara Pembayaran
-                                    dengan QRIS</h3>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Payment
+                                    Instructions with QRIS</h3>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <ol
                                             class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
-                                            <li>Buka aplikasi e-wallet atau m-banking yang mendukung QRIS (GoPay, OVO,
-                                                DANA, LinkAja, dll)</li>
-                                            <li>Pilih opsi scan QR code atau bayar dengan QRIS</li>
-                                            <li>Scan QRIS code di samping ini</li>
-                                            <li>Masukkan nominal sesuai dengan donasi yang Anda inginkan</li>
-                                            <li>Selesaikan pembayaran pada aplikasi</li>
-                                            <li>Screenshot bukti pembayaran</li>
-                                            <li>Upload bukti pembayaran pada form di atas</li>
-                                            <li>Admin akan memverifikasi pembayaran Anda dalam 1x24 jam</li>
+                                            <li>Open e-wallet or m-banking that supports QRIS (GoPay, OVO,
+                                                DANA, LinkAja, etc)</li>
+                                            <li>Select the scan QR code or pay with QRIS</li>
+                                            <li>Scan QRIS code above</li>
+                                            <li>Enter the amount according to the donation you want</li>
+                                            <li>Complete the payment on the application</li>
+                                            <li>Screenshot payment proof</li>
+                                            <li>Upload payment proof on the form above</li>
+                                            <li>Admin will verify your payment within 1x24 hours</li>
                                         </ol>
 
                                         <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-md">
                                             <p class="text-sm text-blue-700 dark:text-blue-300 font-medium">
-                                                Jika pembayaran tidak diverifikasi dalam 24 jam, silakan hubungi admin
-                                                di
-                                                <a href="mailto:admin@imageconverter.com"
-                                                    class="underline">admin@imageconverter.com</a>
+                                                If payment is not verified within 24 hours, please contact admin
+                                                at
+                                                <a href="mailto:muhammadfarhan2747@gmail.com"
+                                                    class="underline">muhammadfarhan2747@gmail.com</a>
                                             </p>
                                         </div>
                                     </div>
